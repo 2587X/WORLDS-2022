@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -23,6 +24,8 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+
+		pros::ADIDigitalOut piston ('A');
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -73,20 +76,47 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+
+
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+
+ pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+	pros::Motor intake (3, pros::E_MOTOR_GEARSET_06, false,  pros::E_MOTOR_ENCODER_COUNTS);
+
+	pros::ADIDigitalOut piston ('A');
+
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+		drive_control();
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+
+			  piston.set_value(true);
+
+		}	else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+
+				piston.set_value(false);
+
+		}
+
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+
+			intake.move_voltage(0);
+
+		} else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
+
+			intake.move_voltage(-11000);
+
+		} else {
+
+			// intake.move_voltage(0);
+
+		}
+
 		pros::delay(20);
 	}
 }
