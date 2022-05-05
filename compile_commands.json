@@ -61,11 +61,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/globals.cpp.o",
-            "src/globals.cpp"
+            "bin/ports.cpp.o",
+            "src/ports.cpp"
         ],
         "directory": "/Users/lukedulworth/Documents/Code/GitHub/WORLDS-2022",
-        "file": "src/globals.cpp"
+        "file": "src/ports.cpp"
     },
     {
         "arguments": [
@@ -129,11 +129,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/ports.cpp.o",
-            "src/ports.cpp"
+            "bin/main.cpp.o",
+            "src/main.cpp"
         ],
         "directory": "/Users/lukedulworth/Documents/Code/GitHub/WORLDS-2022",
-        "file": "src/ports.cpp"
+        "file": "src/main.cpp"
     },
     {
         "arguments": [
@@ -163,10 +163,10 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/main.cpp.o",
-            "src/main.cpp"
+            "bin/globals.cpp.o",
+            "src/globals.cpp"
         ],
         "directory": "/Users/lukedulworth/Documents/Code/GitHub/WORLDS-2022",
-        "file": "src/main.cpp"
+        "file": "src/globals.cpp"
     }
 ]

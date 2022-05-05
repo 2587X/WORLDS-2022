@@ -11,8 +11,16 @@ pros::Motor left2 (left2_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER_C
 pros::Motor left3 (left3_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER_COUNTS);
 
 //right from lift side
-pros::Motor right4 (right4_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor right4 (right4_port, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor right5 (right5_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor right6 (right6_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER_COUNTS);
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+pros::ADIDigitalOut clamp ('H');
+
+pros::ADIDigitalOut cover ('G');
+
+bool clampIsOpen = false;
+
+bool coverIsDown = false;

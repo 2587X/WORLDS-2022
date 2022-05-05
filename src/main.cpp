@@ -7,15 +7,15 @@
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
+// void on_center_button() {
+// 	static bool pressed = false;
+// 	pressed = !pressed;
+// 	if (pressed) {
+// 		pros::lcd::set_text(2, "I was pressed!");
+// 	} else {
+// 		pros::lcd::clear_line(2);
+// 	}
+// }
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -25,11 +25,12 @@ void on_center_button() {
  */
 void initialize() {
 
-		pros::ADIDigitalOut piston ('A');
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
 
-	pros::lcd::register_btn1_cb(on_center_button);
+	engage_brake();
+
+	//
+	// pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -81,41 +82,47 @@ void autonomous() {}
 
 void opcontrol() {
 
- pros::Controller master(pros::E_CONTROLLER_MASTER);
-
-	pros::Motor intake (3, pros::E_MOTOR_GEARSET_06, false,  pros::E_MOTOR_ENCODER_COUNTS);
-
-	pros::ADIDigitalOut piston ('A');
 
 
 	while (true) {
 
 		drive_control();
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
 
-			  piston.set_value(true);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+			if(clampIsOpen == false){
 
-		}	else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
+			  clamp.set_value(true);
+				clampIsOpen = true;
 
-				piston.set_value(false);
+			} else if(clampIsOpen == true){
 
+				clamp.set_value(false);
+				clampIsOpen = false;
+			}
 		}
 
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
+			if(coverIsDown == false){
+			  cover.set_value(true);
+				coverIsDown = true;
+			} else if(coverIsDown == true){
+				cover.set_value(false);
+				coverIsDown = false;
+			}
+		}
 
-			intake.move_voltage(0);
 
-		} else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)){
-
+		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)){
 			intake.move_voltage(-11000);
-
-		} else {
-
-			// intake.move_voltage(0);
-
+		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){
+			intake.move_voltage(6000);
 		}
+		else {
+			intake.move_voltage(0);
+		}
+
 
 		pros::delay(20);
 	}
