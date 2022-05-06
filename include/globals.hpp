@@ -21,3 +21,9 @@ extern pros::ADIDigitalOut cover;
 extern bool clampIsOpen;
 
 extern bool coverIsDown;
+
+extern bool liftIsUp;
+
+extern double TOP_POSITION;
+
+extern double BOTTOM_POSITION;

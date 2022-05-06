@@ -21,6 +21,9 @@ void engage_brake(){
   right5.set_brake_mode(MOTOR_BRAKE_BRAKE);
   right6.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
+  intake.set_brake_mode(MOTOR_BRAKE_BRAKE);
+  lift.set_brake_mode(MOTOR_BRAKE_BRAKE);
+
 }
 
 void drive_control(){

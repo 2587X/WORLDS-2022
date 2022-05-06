@@ -17,10 +17,18 @@ pros::Motor right6 (right6_port, pros::E_MOTOR_GEARSET_18, pros::E_MOTOR_ENCODER
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::ADIDigitalOut clamp ('H');
+pros::ADIDigitalOut clamp ('G');
 
-pros::ADIDigitalOut cover ('G');
+pros::ADIDigitalOut cover ('H');
 
-bool clampIsOpen = false;
+bool clampIsOpen;
 
-bool coverIsDown = false;
+bool coverIsDown;
+
+bool liftIsUp;
+
+
+//lift positions
+double TOP_POSITION = 1100;
+
+double BOTTOM_POSITION = 0;
