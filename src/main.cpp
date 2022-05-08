@@ -1,5 +1,14 @@
 #include "main.h"
 
+
+// bool runCenter = false;
+//
+// bool runLeft = false;
+//
+// bool runRight = false;
+
+pros::ADIAnalogIn autonselector ('F');
+
 auto Chassis = okapi::ChassisControllerBuilder()
     .withMotors({12, 13, 14}, {18, 17, 16})
     .withDimensions({AbstractMotor::gearset::blue, (8 / 2)}, {{3.25_in, 12.4_in}, imev5BlueTPR})
@@ -34,8 +43,14 @@ void initialize() {
 
   drive->generatePath({
   {0_ft, 0_ft, 0_deg},
-  {1.5_ft, 0_ft, 0_deg}},
+  {1.385_ft, 0_ft, 0_deg}},
   "Left Rush"
+  );
+
+  drive->generatePath({
+  {0_ft, 0_ft, 0_deg},
+  {1.45_ft, 0_ft, 0_deg}},
+  "Central Rush"
   );
 
   drive->generatePath({
@@ -43,6 +58,8 @@ void initialize() {
   {0.5_ft, 0_ft, 0_deg}},
   "Goal Pickup"
   );
+
+
 }
 
 /**
@@ -77,23 +94,34 @@ void competition_initialize() {}
 
 void central_rush(){
 
-
 	drive->setTarget("Central Rush");
 
   cover.set_value(true);
 
 	drive->waitUntilSettled();
 
-  drive->setTarget("Central Rush", true);
+  drive->generatePath({
+  {0_ft, 0_ft, 0_deg},
+  {0.9_ft, 0_ft, 0_deg}},
+  "small return"
+  );
+
+  drive->setTarget("small return", true);
 
   drive->waitUntilSettled();
+
+//   cover.set_value(false);
+
+// drive->setTarget("Goal Pickup");
+//
+// drive->waitUntilSettled();
 }
 
 void left_rush(){
 
-  drive->setTarget("Left Rush");
-
   cover.set_value(true);
+
+  drive->setTarget("Left Rush");
 
   drive->waitUntilSettled();
 
@@ -105,13 +133,35 @@ void left_rush(){
 
   drive->waitUntilSettled();
 
+  cover.set_value(false);
+
 }
 
 void autonomous() {
-
-	central_rush();
   //
-  left_rush();
+	// central_rush();
+  // //
+  // left_rush();
+
+  if(autonselector.get_value() <= 2047){
+
+	   pros::lcd::set_text(0, "center rush ");
+
+      central_rush();
+
+
+  }else if ((autonselector.get_value() > 2047)){
+
+    	pros::lcd::set_text(0, "Left Rush");
+
+      left_rush();
+
+  }else{
+
+        	pros::lcd::set_text(0, "uh ohh");
+
+    left_rush();
+  }
 
 }
 
@@ -194,6 +244,10 @@ void opcontrol() {
 
 
 		drive_control();
+
+    pros::lcd::print(2, "Angler Position: %f", autonselector.get_value());
+
+
 		pros::delay(20);
 	}
 }
